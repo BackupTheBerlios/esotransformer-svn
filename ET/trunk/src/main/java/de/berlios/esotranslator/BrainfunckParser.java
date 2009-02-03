@@ -1,4 +1,4 @@
-package de.chbecker;
+package de.berlios.esotranslator;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

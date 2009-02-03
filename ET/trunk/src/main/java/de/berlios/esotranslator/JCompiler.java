@@ -1,8 +1,8 @@
-package de.chbecker;
+package de.berlios.esotranslator;
 
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
-// modiefied example from http://www.java2s.com/Code/Java/JDK-6/CompileaJavacode.htm
+// modified example from http://www.java2s.com/Code/Java/JDK-6/CompileaJavacode.htm
 
 public class JCompiler {
     private String sourceFile;

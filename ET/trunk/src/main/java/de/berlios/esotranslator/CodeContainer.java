@@ -1,4 +1,4 @@
-package de.chbecker;
+package de.berlios.esotranslator;
 
 
 public abstract class CodeContainer {
