@@ -1,4 +1,4 @@
-package de.berlios.esotranslator;
+package de.berlios.esotranslator.brainfuck;
 
 /**
  * BFBuilder interface defines all Brainfuck commands
@@ -15,6 +15,4 @@ public interface BFBuilder {
     public void startLoop();
     public void endLoop();
 
-    public String getCode();// return  generated source code
-    public void setName(String name);  // "class" name}
 }

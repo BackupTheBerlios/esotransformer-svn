@@ -5,4 +5,68 @@
   <name>EsoTranslator</name>
   <version>0.0.1-SNAPSHOT</version>
   <description>translates esoteric programming languages into common programming languages</description>
+  <build>
+  	<pluginManagement>
+  		<plugins>
+  		</plugins>
+  	</pluginManagement>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-jar-plugin</artifactId>
+  			<version>2.2</version>
+  			<configuration>
+	          <archive>
+	            <manifest>
+	              <addClasspath>true</addClasspath>
+	              <mainClass>de.berlios.esotranslator.EsoTranslator</mainClass>
+	            </manifest>
+	          </archive>
+        	</configuration>
+  			
+  		</plugin>
+  	</plugins>
+  	
+  </build>
+  <dependencies>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.5</version>
+  	</dependency>
+<!-- maven-jar-plugin -->
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.1</version>
+    </dependency>
+
+<!-- log4j excludes -->  	
+  	<dependency>
+  		<groupId>log4j</groupId>
+  		<artifactId>log4j</artifactId>
+  		<version>1.2.15</version>
+  		<type>jar</type>
+          <scope>compile</scope>
+          <exclusions>
+              <exclusion>
+                  <groupId>com.sun.jmx</groupId>
+                  <artifactId>jmxri</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>com.sun.jdmk</groupId>
+                  <artifactId>jmxtools</artifactId>
+              </exclusion>
+              <exclusion>
+                  <groupId>javax.jms</groupId>
+                  <artifactId>jms</artifactId>
+              </exclusion>
+          </exclusions>
+  	</dependency>
+  </dependencies>
 </project>
