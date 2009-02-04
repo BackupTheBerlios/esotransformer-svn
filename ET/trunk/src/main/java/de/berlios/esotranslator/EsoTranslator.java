@@ -1,3 +1,20 @@
+/**
+ * EsoTranslator - esoteric to common programming languages translator
+ *
+ * Copyright (C) 2009 Christoph Becker, tuergeist@users.berlios.de
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or 
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+ * for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along 
+ * with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
 package de.berlios.esotranslator;
 
 import java.io.BufferedReader;
@@ -7,11 +24,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import de.berlios.esotranslator.brainfuck.BFBuilder;
-import de.berlios.esotranslator.brainfuck.BrainfuckParser;
-
 public class EsoTranslator {
-	private static BFBuilder builder;
 	static CodeContainer container;
 	Parser parser;
 	File inFile;
@@ -22,10 +35,10 @@ public class EsoTranslator {
 	 * @throws BuilderException 
 	 */
 	public static void main(String[] args) throws IOException, BuilderException {
-		if (args.length != 2) {
+		if (args.length != 2) {	
 			System.err.println("Usage: EsoTranslator <SourceFile> <DestinationLanguage>\n");
-			System.err.println("    Supported source language is: Brainfuck");
-			System.err.println("    Supported destination languages are: Java, C++, C\n");
+			System.err.println("    Supported source language is: " + EsoLanguage.getList());
+			System.err.println("    Supported destination languages are: "+ CommonLanguage.getList() + "\n");
 			System.err.println("Example: EsoTranslator testMe.bf Java");
 			System.err.println("    will create testMe.java and testMe.class");
 			System.exit(1);
@@ -49,12 +62,15 @@ public class EsoTranslator {
 		String tmp = inFile.getName();
 		final String classname = tmp.substring(0, tmp.indexOf('.'));
 		
-		String inLang = "bf"; // hard coded for now
-
-		container = ContainerFactory.get(inLang, outLang);
+		
+		EsoLanguage inLang = LanguageDetector.detect(inFile); 
+		CommonLanguage dstLang = LanguageDetector.detectDestination(outLang);
+		
+		container = ContainerFactory.get(inLang, dstLang);
 		container.setName(classname);
 		
-		parser = new BrainfuckParser(classname, container);
+		parser = ParserFactory.get(inLang);
+		parser.setContainer(container);
 	}
 	
 	public void translate() throws IOException {

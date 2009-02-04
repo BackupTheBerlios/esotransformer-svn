@@ -1,3 +1,20 @@
+/**
+ * EsoTranslator - esoteric to common programming languages translator
+ *
+ * Copyright (C) 2009 Christoph Becker, tuergeist@users.berlios.de
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or 
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful, but 
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+ * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+ * for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along 
+ * with this program; if not, see <http://www.gnu.org/licenses/>.
+ */
 package de.berlios.esotranslator.brainfuck;
 
 import java.io.BufferedReader;
@@ -13,11 +30,18 @@ public class BrainfuckParser implements Parser {
 	BFBuilder builder;
 
 
-	public BrainfuckParser(String className, CodeContainer container) {
+	public BrainfuckParser() {
 		mem = new int[1000]; // could become a problem.
-		this.builder = (BFBuilder) container; // each BF Container implements BFBuilder ;)	
 	}
 
+	@Override
+	public void setContainer(CodeContainer container) {
+		this.builder = (BFBuilder) container; // each BF Container implements BFBuilder ;)	
+		
+	}
+
+	
+	
 	void dumpMem() {
 		for (int i = 0; i < mem.length; i++) {
 			System.out.printf("%03d ", mem[i]);
@@ -84,9 +108,10 @@ public class BrainfuckParser implements Parser {
 	void printField() {
 		char c = (char) mem[ptr];
 		if (c < 33|| c > 126) {
-			System.out.print((int) c);
+			// is not printable, so print out the integer value
+			System.out.print((int) c + "d ");
 		} else {
-			System.out.print("(" + c + ")");
+			System.out.print(c);
 		}
 		builder.printField();
 	}
