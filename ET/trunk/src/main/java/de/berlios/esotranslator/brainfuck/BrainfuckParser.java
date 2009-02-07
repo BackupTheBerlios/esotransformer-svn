@@ -17,10 +17,12 @@
  */
 package de.berlios.esotranslator.brainfuck;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import de.berlios.esotranslator.CodeContainer;
+import de.berlios.esotranslator.FileHelper;
 import de.berlios.esotranslator.Parser;
 
 public class BrainfuckParser implements Parser {
@@ -28,6 +30,8 @@ public class BrainfuckParser implements Parser {
 	int ptr;
 	int[] mem;
 	BFBuilder builder;
+	String endLoopChar = "]";
+	private PrintWriter writer;
 
 
 	public BrainfuckParser() {
@@ -40,20 +44,22 @@ public class BrainfuckParser implements Parser {
 		
 	}
 
-	
-	
-	void dumpMem() {
-		for (int i = 0; i < mem.length; i++) {
-			System.out.printf("%03d ", mem[i]);
-		}
-		System.out.print("\n");
-	}
+//	void dumpMem() {
+//		for (int i = 0; i < mem.length; i++) {
+//			System.out.printf("%03d ", mem[i]);
+//		}
+//		System.out.print("\n");
+//	}
+//
+//	public int[] getMem() {
+//		return mem; // for testing
+//	}
 
-	public int[] getMem() {
-		return mem; // for testing
+	public void parse(File sourceFile) throws IOException {
+		parseString(FileHelper.fileToString(sourceFile));
 	}
-
-	public void parse(String bf) {
+	
+	void parseString(String bf) {	
 		char[] code = bf.toCharArray();
 		int pos = 0;
 
@@ -109,35 +115,44 @@ public class BrainfuckParser implements Parser {
 		char c = (char) mem[ptr];
 		if (c < 33|| c > 126) {
 			// is not printable, so print out the integer value
-			System.out.print((int) c + "d ");
+			writer.write((int) c);
+			writer.write("d ");
+			
 		} else {
-			System.out.print(c);
+			writer.write(c);
 		}
 		builder.printField();
 	}
 
 	void readField() {
-		try {
-			BufferedReader bin = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("Input: ");
-			mem[ptr] = Integer.parseInt(bin.readLine());
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.exit(1);
-		}
+//		try {
+//			BufferedReader bin = new BufferedReader(new InputStreamReader(System.in));
+//			System.out.println("Input: ");
+//			mem[ptr] = Integer.parseInt(bin.readLine());
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//			System.exit(1);
+//		}
+		mem[ptr] = (int) Math.round(Math.random() * 100); 
 		builder.readField();
 	}
 
 	int doLoop(String bf, int pos) {
 		builder.startLoop();
 
-		int endPos = bf.lastIndexOf(']');
+		int endPos = bf.lastIndexOf(endLoopChar );
 		String loopCode = bf.substring(pos + 1, endPos);
 		
 		while (mem[ptr] != 0) {
-			parse(loopCode);
+			parseString(loopCode);
 		}
 		builder.endLoop();
 		return endPos;
+	}
+
+	@Override
+	public void setWriter(PrintWriter writer) {
+		// TODO Auto-generated method stub
+		this.writer = writer;
 	}
 }

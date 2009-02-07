@@ -17,107 +17,40 @@
  */
 package de.berlios.esotranslator;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
+
 public class EsoTranslator {
-	static CodeContainer container;
-	Parser parser;
-	File inFile;
-	
 	/**
 	 * @param args
 	 * @throws IOException
 	 * @throws BuilderException 
 	 */
 	public static void main(String[] args) throws IOException, BuilderException {
+		Logger logger = Logger.getRootLogger();
+		logger.addAppender(new ConsoleAppender(new SimpleLayout()));
+		
 		if (args.length != 2) {	
-			System.err.println("Usage: EsoTranslator <SourceFile> <DestinationLanguage>\n");
-			System.err.println("    Supported source language is: " + EsoLanguage.getList());
-			System.err.println("    Supported destination languages are: "+ CommonLanguage.getList() + "\n");
-			System.err.println("Example: EsoTranslator testMe.bf Java");
-			System.err.println("    will create testMe.java and testMe.class");
+			logger.info("Usage: EsoTranslator <SourceFile> <DestinationLanguage>\n");
+			logger.info("    Supported source language is: " + EsoLanguage.getList());
+			logger.info("    Supported destination languages are: "+ CommonLanguage.getList() + "\n");
+			logger.info("Example: EsoTranslator testMe.bf Java");
+			logger.info("    will create testMe.java and testMe.class");
 			System.exit(1);
 		}
 		
 		final String filename = args[0];
 		File inFile = new File(filename);
 		if (!inFile.exists()) {
-			System.err.println(filename + " does not exist!");
+			logger.error(filename + " does not exist!");
 			System.exit(1);
 		}
 
-		EsoTranslator trans = new EsoTranslator(inFile, args[1]);
+		Translator trans = new Translator(inFile, args[1]);
 		trans.translate();
-		
-	}
-	
-	EsoTranslator(File sourceFile, String outLang) throws IOException, BuilderException {
-		this.inFile = sourceFile;
-		
-		String tmp = inFile.getName();
-		final String classname = tmp.substring(0, tmp.indexOf('.'));
-		
-		
-		EsoLanguage inLang = LanguageDetector.detect(inFile); 
-		CommonLanguage dstLang = LanguageDetector.detectDestination(outLang);
-		
-		container = ContainerFactory.get(inLang, dstLang);
-		container.setName(classname);
-		
-		parser = ParserFactory.get(inLang);
-		parser.setContainer(container);
-	}
-	
-	public void translate() throws IOException {
-		// Parse stuff
-		parser.parse(readFile(inFile).toString());
-		System.out.println();
-		writeCode();
-		final String binFile = compile();
-		if (binFile != null) {
-			System.out.println(binFile + " created.");
-		} else {
-			System.err.println("Can not compile :(");
-		}		
-	}
-
-	static StringBuilder readFile(File inFile) throws IOException{
-		// read file
-		FileReader fr = new FileReader(inFile);
-		BufferedReader br = new BufferedReader(fr);
-	
-		StringBuilder sb = new StringBuilder();
-		String line = br.readLine();
-		while (line != null) {
-			sb.append(line);
-			line = br.readLine();
-		}
-		return sb;
-	}
-
-	
-	
-	public String compile() {
-		if (container.compile())
-			return container.getBinaryFileName();
-		else
-			return null;
-	}
-
-	public void writeCode() {
-		// Write new language source
-		BufferedWriter bw;
-		try {
-			bw = new BufferedWriter(new FileWriter(container.getFileName()));
-			bw.write(container.getCode());
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

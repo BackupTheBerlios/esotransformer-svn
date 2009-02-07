@@ -17,6 +17,10 @@
  */
 package de.berlios.esotranslator;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 public abstract class CodeContainer {
     StringBuilder code = new StringBuilder();
@@ -46,5 +50,17 @@ public abstract class CodeContainer {
     public void setName(String name) {
     	className = name;
     }
+    
+	public void writeCode() {
+		// Write new language source
+		BufferedWriter bw;
+		try {
+			bw = new BufferedWriter(new FileWriter(getFileName()));
+			bw.write(getCode());
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
     
 }

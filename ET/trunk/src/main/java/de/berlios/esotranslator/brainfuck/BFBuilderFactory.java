@@ -18,18 +18,29 @@
 package de.berlios.esotranslator.brainfuck;
 
 import de.berlios.esotranslator.BuilderException;
+import de.berlios.esotranslator.CodeContainer;
+import de.berlios.esotranslator.CodeContainerFactory;
+import de.berlios.esotranslator.CommonLanguage;
 
-public class BFBuilderFactory {
-	public BFBuilder getBuilder(String outLang) throws BuilderException {
-		if (outLang.equals("Java")) {
-			return new de.berlios.esotranslator.brainfuck.JavaBuilder(); 
+public class BFBuilderFactory implements CodeContainerFactory {
+	public CodeContainer getBuilder(CommonLanguage outLang)
+			throws BuilderException {
+		CodeContainer container;
+		switch (outLang) {
+		case Java:
+			container = new JavaBuilder();
+			break;
+		case Cpp:
+			container = new CppBuilder();
+			break;
+		case C:
+			container = new CBuilder();
+			break;
+		default:
+			throw new BuilderException(
+					"No Brainfuck builder available for destination language "
+							+ outLang);
 		}
-		else if (outLang.equals("C++")) {
-			return new de.berlios.esotranslator.brainfuck.CppBuilder();
-		}
-		else if (outLang.equals("C")) {
-			return new de.berlios.esotranslator.brainfuck.CBuilder();
-		}
-		throw new BuilderException("No Brainfuck builder available for destination language " + outLang);
+		return container;
 	}
 }

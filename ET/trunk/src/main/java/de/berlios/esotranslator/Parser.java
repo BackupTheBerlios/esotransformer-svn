@@ -17,8 +17,13 @@
  */
 package de.berlios.esotranslator;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 public interface Parser {
-	public void parse(String program);
+	public void parse(File sourceFile) throws IOException;
 	public void setContainer(CodeContainer container);
+	public void setWriter(PrintWriter writer);
 //	public void setName(String name);
 }
