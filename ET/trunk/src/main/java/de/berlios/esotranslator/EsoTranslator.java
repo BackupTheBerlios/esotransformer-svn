@@ -40,6 +40,7 @@ public class EsoTranslator {
 			logger.info("    Supported destination languages are: "+ CommonLanguage.getList() + "\n");
 			logger.info("Example: EsoTranslator testMe.bf Java");
 			logger.info("    will create testMe.java and testMe.class");
+			logger.info(args.length);
 			System.exit(1);
 		}
 		

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import de.berlios.esotranslator.FileHelper;
 
@@ -22,15 +23,21 @@ public class OokParser extends BrainfuckParser {
 	}};
 
 	public void parse(File sourceFile) throws IOException {
+		Logger logger = Logger.getLogger("OokParser");
 		String sb = FileHelper.fileToString(sourceFile);
-		sb.replaceAll(" ", "").toLowerCase().replaceAll("ook", "");
+		sb = sb.replaceAll(" ", "").toLowerCase().replaceAll("ook", "");
 		
 		char[] strings = sb.toCharArray();
 		StringBuilder brainfuck = new StringBuilder();
 		for (int i=0; i < strings.length; i++) {
-			brainfuck.append(ookToBf.get(strings[i] + strings[++i]));
+			String ookCode = String.valueOf(strings[i]) + String.valueOf(strings[++i]);
+			logger.info(ookCode);
+			char bfcode = ookToBf.get(ookCode);
+			logger.info(ookCode + " -> " + bfcode);
+			brainfuck.append(bfcode);
 			
 		}
+		System.out.println(brainfuck.toString());
 		parseString(brainfuck.toString());
 	}
 

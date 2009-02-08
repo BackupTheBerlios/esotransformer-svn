@@ -32,7 +32,7 @@ public class OokParserTest {
 			parser = ParserFactory.get(inLang);
 			parser.setContainer(container);
 			parser.setWriter(writer);
-			File inFile = new File("/home/cb/jee-workspace/esotranslator/src/test/resources/Hello.ook");
+			File inFile = new File("src/test/resources/Hello.ook");
 			parser.parse(inFile );
 			
 		} catch (BuilderException e) {
@@ -41,6 +41,7 @@ public class OokParserTest {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail("bad");
 		}
 
 	}

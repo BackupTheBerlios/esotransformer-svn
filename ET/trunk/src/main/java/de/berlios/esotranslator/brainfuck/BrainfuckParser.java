@@ -113,7 +113,7 @@ public class BrainfuckParser implements Parser {
 
 	void printField() {
 		char c = (char) mem[ptr];
-		if (c < 33|| c > 126) {
+		if (c>0 || c < 33|| c > 126) {
 			// is not printable, so print out the integer value
 			writer.write((int) c);
 			writer.write("d ");
