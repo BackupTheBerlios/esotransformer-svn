@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.apache.log4j.Logger;
+
 import de.berlios.esotranslator.CodeContainer;
 import de.berlios.esotranslator.FileHelper;
 import de.berlios.esotranslator.Parser;
@@ -30,9 +32,10 @@ public class BrainfuckParser implements Parser {
 	int ptr;
 	int[] mem;
 	BFBuilder builder;
-	String endLoopChar = "]";
+	char endLoopChar = ']';
+	char startLoopChar = '[';
 	private PrintWriter writer;
-
+	private Logger logger = Logger.getLogger("BFParser");
 
 	public BrainfuckParser() {
 		mem = new int[1000]; // could become a problem.
@@ -84,7 +87,12 @@ public class BrainfuckParser implements Parser {
 				printField();
 				break;
 			case '[':
-				pos = doLoop(bf, pos);
+				try {
+						pos = doLoop(bf, pos);
+					} catch (Exception e) {
+						logger.error(e);
+						pos = code.length;
+					}
 				break;
 			}
 			pos++;
@@ -137,10 +145,10 @@ public class BrainfuckParser implements Parser {
 		builder.readField();
 	}
 
-	int doLoop(String bf, int pos) {
+	int doLoop(String bf, int pos) throws Exception {
 		builder.startLoop();
 
-		int endPos = bf.lastIndexOf(endLoopChar );
+		int endPos = findCorrespondingBracket(bf, pos);
 		String loopCode = bf.substring(pos + 1, endPos);
 		
 		while (mem[ptr] != 0) {
@@ -150,6 +158,28 @@ public class BrainfuckParser implements Parser {
 		return endPos;
 	}
 
+	
+	int findCorrespondingBracket(String bf, int pos) throws Exception {
+		int cpos = 0;
+		int openBrackets = 1;
+		while(cpos++ < bf.length()) {
+			if (bf.charAt(cpos) == startLoopChar) {
+				openBrackets++;
+			} 
+			else if (bf.charAt(cpos) == endLoopChar) {
+				openBrackets--;
+			}
+			
+			if (openBrackets == 0) {
+				return cpos;
+			}
+			else if (openBrackets < 0) {
+				throw new Exception("Too many closing brackets found!");
+			}
+		}
+		throw new Exception("Too less closing brackets found!");
+	}
+	
 	@Override
 	public void setWriter(PrintWriter writer) {
 		// TODO Auto-generated method stub
