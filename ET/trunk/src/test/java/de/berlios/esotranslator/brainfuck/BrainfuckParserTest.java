@@ -2,40 +2,61 @@ package de.berlios.esotranslator.brainfuck;
 
 import static org.junit.Assert.*;
 
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 import org.junit.Test;
 
 import de.berlios.esotranslator.CodeContainer;
-
-
+import de.berlios.esotranslator.ParserException;
 
 public class BrainfuckParserTest {
-	private BrainfuckParser bp= new BrainfuckParser();;
-	
+	private BrainfuckParser bp = new BrainfuckParser();;
+	static {
+		Logger logger = Logger.getRootLogger();
+		logger.addAppender(new ConsoleAppender(new SimpleLayout()));
+	}
+
 	@Test
-	public void testDoLoop() {
+	public void testDoLoop() throws Exception {
 		CodeContainerImpl container = new CodeContainerImpl();
 		bp.setContainer(container);
-		bp.parseString("[..");
+		try {
+			bp.parseString("[..");
+			assertNull("parser should throw an exception");
+		} catch (ParserException e) {
+			assertTrue(true);
+		}
 		assertEquals(1, container.openloops);
 		assertEquals(0, container.loopcount);
-		
+
 		container.openloops = 0;
 		container.loopcount = 0;
 		bp.parseString("[..][..]");
 		assertEquals(0, container.openloops);
 		assertEquals(2, container.loopcount);
 	}
-	
+
 	@Test
-	public void testDoLoopComplex() {
+	public void testDoLoopComplex() throws Exception {
 		CodeContainerImpl container = new CodeContainerImpl();
 		bp.setContainer(container);
 		bp.parseString("[..][[..][..]]");
-		assertEquals(4, container.loopcount);
-		assertEquals(0, container.openloops);	
+		assertEquals(2, container.loopcount); // the both two inner loops
+		// won't start
+		assertEquals(0, container.openloops);
 	}
-	
-	
+
+	@Test
+	public void testDoLoopComplex2() throws Exception {
+		CodeContainerImpl container = new CodeContainerImpl();
+		bp.setContainer(container);
+		bp.parseString("[..]+[[..-]+[..-]]");
+		assertEquals(4, container.loopcount); // the both two inner loops
+		// won't start
+		assertEquals(0, container.openloops);
+	}
+
 	@Test
 	public void testFindCorrespondingBracket() throws Exception {
 		String bf = "[..]";
@@ -49,13 +70,14 @@ public class BrainfuckParserTest {
 		int pos = 0;
 		assertEquals(9, bp.findCorrespondingBracket(bf, pos));
 	}
+
 	@Test
 	public void testFindCorrespondingBracketSequentiell() throws Exception {
 		String bf = "[..]..[..]";
 		int pos = 0;
 		assertEquals(3, bp.findCorrespondingBracket(bf, pos));
 	}
-	
+
 	@Test
 	public void testFindCorrespondingBracketComplex() throws Exception {
 		String bf = "[[..].[..[]].[..]]";
@@ -64,10 +86,10 @@ public class BrainfuckParserTest {
 	}
 }
 
-
 class CodeContainerImpl extends CodeContainer implements BFBuilder {
 	int openloops;
 	int loopcount;
+
 	@Override
 	public String getBinaryFileName() {
 		// TODO Auto-generated method stub
@@ -95,13 +117,13 @@ class CodeContainerImpl extends CodeContainer implements BFBuilder {
 	@Override
 	public void decField() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void decPointer() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -114,25 +136,25 @@ class CodeContainerImpl extends CodeContainer implements BFBuilder {
 	@Override
 	public void incField() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void incPointer() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void printField() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void readField() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -140,5 +162,5 @@ class CodeContainerImpl extends CodeContainer implements BFBuilder {
 		// TODO Auto-generated method stub
 		openloops++;
 	}
-	
+
 }

@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import de.berlios.esotranslator.CodeContainer;
 import de.berlios.esotranslator.FileHelper;
 import de.berlios.esotranslator.Parser;
+import de.berlios.esotranslator.ParserException;
 
 public class BrainfuckParser implements Parser {
 
@@ -38,7 +39,7 @@ public class BrainfuckParser implements Parser {
 	private Logger logger = Logger.getLogger("BFParser");
 
 	public BrainfuckParser() {
-		mem = new int[1000]; // could become a problem.
+		mem = new int[100]; // could become a problem.
 	}
 
 	@Override
@@ -59,10 +60,15 @@ public class BrainfuckParser implements Parser {
 //	}
 
 	public void parse(File sourceFile) throws IOException {
-		parseString(FileHelper.fileToString(sourceFile));
+		try {
+			parseString(FileHelper.fileToString(sourceFile));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	void parseString(String bf) {	
+	void parseString(String bf) throws ParserException  {	
 		char[] code = bf.toCharArray();
 		int pos = 0;
 
@@ -86,13 +92,15 @@ public class BrainfuckParser implements Parser {
 			case '.':
 				printField();
 				break;
+				
 			case '[':
-				try {
+//				try {
 						pos = doLoop(bf, pos);
-					} catch (Exception e) {
-						logger.error(e);
-						pos = code.length;
-					}
+//					} catch (Exception e) {
+//						//logger.error(e);
+//						e.getStackTrace();
+//						pos = code.length;
+//					}
 				break;
 			}
 			pos++;
@@ -120,14 +128,16 @@ public class BrainfuckParser implements Parser {
 	}
 
 	void printField() {
-		char c = (char) mem[ptr];
-		if (c>0 || c < 33|| c > 126) {
-			// is not printable, so print out the integer value
-			writer.write((int) c);
-			writer.write("d ");
-			
-		} else {
-			writer.write(c);
+		if (writer != null) {
+			char c = (char) mem[ptr];
+			if (c>0 || c < 33|| c > 126) {
+				// is not printable, so print out the integer value
+				writer.write((int) c);
+				writer.write("d ");
+				
+			} else {
+				writer.write(c);
+			}
 		}
 		builder.printField();
 	}
@@ -145,7 +155,7 @@ public class BrainfuckParser implements Parser {
 		builder.readField();
 	}
 
-	int doLoop(String bf, int pos) throws Exception {
+	int doLoop(String bf, int pos) throws ParserException {
 		builder.startLoop();
 
 		int endPos = findCorrespondingBracket(bf, pos);
@@ -159,10 +169,10 @@ public class BrainfuckParser implements Parser {
 	}
 
 	
-	int findCorrespondingBracket(String bf, int pos) throws Exception {
-		int cpos = 0;
-		int openBrackets = 1;
-		while(cpos++ < bf.length()) {
+	int findCorrespondingBracket(String bf, int pos) throws ParserException {
+		int cpos = pos;
+		int openBrackets = 0;
+		while(cpos < bf.length()) {
 			if (bf.charAt(cpos) == startLoopChar) {
 				openBrackets++;
 			} 
@@ -174,10 +184,11 @@ public class BrainfuckParser implements Parser {
 				return cpos;
 			}
 			else if (openBrackets < 0) {
-				throw new Exception("Too many closing brackets found!");
+				throw new ParserException("Too many closing brackets found!");
 			}
+			cpos++;
 		}
-		throw new Exception("Too less closing brackets found!");
+		throw new ParserException("Too less closing brackets found!");
 	}
 	
 	@Override

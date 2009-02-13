@@ -7,10 +7,13 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import de.berlios.esotranslator.FileHelper;
+import de.berlios.esotranslator.ParserException;
 
 
 public class OokParser extends BrainfuckParser {
-	Map<String, Character> ookToBf = new HashMap<String, Character>() {{
+	Map<String, Character> ookToBf = new HashMap<String, Character>() {
+		private static final long serialVersionUID = 1354L;
+	{
 		put(".?", '>');
 		put("?.", '<');
 		put("..", '+');
@@ -23,22 +26,33 @@ public class OokParser extends BrainfuckParser {
 	}};
 
 	public void parse(File sourceFile) throws IOException {
-		Logger logger = Logger.getLogger("OokParser");
 		String sb = FileHelper.fileToString(sourceFile);
-		sb = sb.replaceAll(" ", "").toLowerCase().replaceAll("ook", "");
+		try {
+			parseString(ookToBrainfuck(sb));
+		} catch (ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	String ookToBrainfuck(String ook) throws ParserException {
+		Logger logger = Logger.getLogger("OokParser");
+		String sb = ook.replaceAll(" ", "").toLowerCase().replaceAll("ook", "");
 		
 		char[] strings = sb.toCharArray();
 		StringBuilder brainfuck = new StringBuilder();
 		for (int i=0; i < strings.length; i++) {
 			String ookCode = String.valueOf(strings[i]) + String.valueOf(strings[++i]);
-			logger.info(ookCode);
+//			logger.info(ookCode);
+			if (! ookToBf.containsKey(ookCode)) {
+				throw new ParserException("OokCode: " + ookCode + " is unknown. (Position: " + (i-1) +")");
+			}
 			char bfcode = ookToBf.get(ookCode);
-			logger.info(ookCode + " -> " + bfcode);
+//			logger.info(ookCode + " -> " + bfcode);
 			brainfuck.append(bfcode);
 			
 		}
-		System.out.println(brainfuck.toString());
-		parseString(brainfuck.toString());
+//		System.out.println(brainfuck.toString());
+		return brainfuck.toString();
 	}
-
 }
