@@ -43,7 +43,7 @@ public class CBuilder extends CommonBuilder implements BFBuilder {
 		sb.append("int ptr = 0;" + linefeed);
 
 		sb.append("void printField() {" + linefeed);
-		sb.append("  if (mem[ptr] < 33 || mem[ptr] > 126)  {" + linefeed);
+		sb.append("  if (mem[ptr] < 32 || mem[ptr] > 126)  {" + linefeed);
 		sb.append("    printf(\"%dd \",mem[ptr]);"
 				+ linefeed);
 		sb.append("} else {" + linefeed);

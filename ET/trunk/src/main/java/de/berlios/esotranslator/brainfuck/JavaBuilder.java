@@ -57,7 +57,7 @@ public class JavaBuilder extends CommonBuilder implements BFBuilder {
 		sb.append(" }" + linefeed);
 		sb.append(" void printField() {" + linefeed);
 		sb.append(" 	char c = (char) mem[ptr];" + linefeed);
-		sb.append(" 		if (c < 33|| c > 126) {" + linefeed);
+		sb.append(" 		if (c < 32|| c > 126) {" + linefeed);
 		sb.append(" 			System.out.print((int) c  + \"d \");" + linefeed);
 		sb.append(" 		} else {" + linefeed);
 		sb.append(" 			System.out.print(c);" + linefeed);
