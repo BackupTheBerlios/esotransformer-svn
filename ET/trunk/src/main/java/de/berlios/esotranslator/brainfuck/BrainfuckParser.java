@@ -48,17 +48,6 @@ public class BrainfuckParser implements Parser {
 		
 	}
 
-//	void dumpMem() {
-//		for (int i = 0; i < mem.length; i++) {
-//			System.out.printf("%03d ", mem[i]);
-//		}
-//		System.out.print("\n");
-//	}
-//
-//	public int[] getMem() {
-//		return mem; // for testing
-//	}
-
 	public void parse(File sourceFile) throws IOException {
 		try {
 			parseString(FileHelper.fileToString(sourceFile));
@@ -94,13 +83,7 @@ public class BrainfuckParser implements Parser {
 				break;
 				
 			case '[':
-//				try {
-						pos = doLoop(bf, pos);
-//					} catch (Exception e) {
-//						//logger.error(e);
-//						e.getStackTrace();
-//						pos = code.length;
-//					}
+				pos = doLoop(bf, pos);
 				break;
 			}
 			pos++;
@@ -130,7 +113,7 @@ public class BrainfuckParser implements Parser {
 	void printField() {
 		if (writer != null) {
 			char c = (char) mem[ptr];
-			if (c>0 || c < 33|| c > 126) {
+			if (c < 32 || c > 126) {
 				// is not printable, so print out the integer value
 				writer.write((int) c);
 				writer.write("d ");
@@ -143,14 +126,6 @@ public class BrainfuckParser implements Parser {
 	}
 
 	void readField() {
-//		try {
-//			BufferedReader bin = new BufferedReader(new InputStreamReader(System.in));
-//			System.out.println("Input: ");
-//			mem[ptr] = Integer.parseInt(bin.readLine());
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//			System.exit(1);
-//		}
 		mem[ptr] = (int) Math.round(Math.random() * 100); 
 		builder.readField();
 	}
@@ -193,7 +168,6 @@ public class BrainfuckParser implements Parser {
 	
 	@Override
 	public void setWriter(PrintWriter writer) {
-		// TODO Auto-generated method stub
 		this.writer = writer;
 	}
 }
