@@ -15,22 +15,11 @@
  * You should have received a copy of the GNU General Public License along 
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.berlios.esotranslator;
+package de.berlios.esotranslator.compiler;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
-// modified example from http://www.java2s.com/Code/Java/JDK-6/CompileaJavacode.htm
+public class CCompiler extends GeneralGCCCompiler {
 
-public class JCompiler {
-    private String sourceFile;
-
-    public JCompiler(String sourcefile) {
-        this.sourceFile = sourcefile;
-    }
-
-    public boolean compile() {
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        int results = compiler.run(null, null, null, sourceFile);
-        return (results == 0);
-    }
+	public CCompiler() {
+		compilerCmdLine = "/usr/bin/gcc "; 
+	}
 }

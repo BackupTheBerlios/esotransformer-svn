@@ -17,7 +17,6 @@
  */
 package de.berlios.esotranslator.brainfuck;
 
-import de.berlios.esotranslator.JCompiler;
 
 public class JavaBuilder extends CommonBuilder implements BFBuilder {
 	String language = "Java";
@@ -66,12 +65,6 @@ public class JavaBuilder extends CommonBuilder implements BFBuilder {
 		sb.append(linefeed + "// main action goes here" + linefeed);
 		sb.append("public void doIt() {" + linefeed);
 		return sb.toString();
-	}
-
-	public boolean compile() {
-		// Compile Java Code
-		JCompiler compiler = new JCompiler(getFileName());
-		return compiler.compile();
 	}
 
 	@Override

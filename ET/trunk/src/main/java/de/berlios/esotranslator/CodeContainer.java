@@ -40,12 +40,6 @@ public abstract class CodeContainer {
     protected void add(String codeline) {
         code.append(codeline + linefeed);
     }
-
-    // child should implement this
-    public boolean compile() {
-        System.err.println("I currently cannot compile " + getFileName() + " in language '" + language +"'. ");
-        return false;
-    }
     
     public void setName(String name) {
     	className = name;

@@ -30,6 +30,7 @@ public class Translator {
 	File inFile;
 	Logger logger = Logger.getLogger("Translator");
 	private PrintWriter writer;
+	private Compiler compiler;
 
 	public Translator(File sourceFile, String outLang) throws IOException, BuilderException {
 		this.inFile = sourceFile;
@@ -50,6 +51,12 @@ public class Translator {
 		parser = ParserFactory.get(inLang);
 		parser.setContainer(container);
 		parser.setWriter(writer);
+		
+		try {
+			compiler = CompilerFactory.getCompiler(dstLang);
+		} catch (IllegalAccessException e) {
+			throw new BuilderException(e.getMessage());
+		}
 	}
 
 	public void translate() throws IOException {
@@ -65,8 +72,9 @@ public class Translator {
 	}
 
 	public void compile() {
-		if (container.compile()) {
-			logger.info(container.getBinaryFileName() + " created.");
+		compiler.setSourceFile(container.getFileName());
+		if (compiler.compile()) {
+			logger.info(compiler.getBinaryFilename() + " created.");
 		}
 		else {
 			logger.warn("Cannot compile :(");
