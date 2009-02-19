@@ -25,14 +25,9 @@ public class OokParser extends BrainfuckParser {
 		
 	}};
 
-	public void parse(File sourceFile) throws IOException {
+	public void parse(File sourceFile) throws IOException, ParserException {
 		String sb = FileHelper.fileToString(sourceFile);
-		try {
-			parseString(ookToBrainfuck(sb));
-		} catch (ParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		parseString(ookToBrainfuck(sb));		
 	}
 
 	String ookToBrainfuck(String ook) throws ParserException {

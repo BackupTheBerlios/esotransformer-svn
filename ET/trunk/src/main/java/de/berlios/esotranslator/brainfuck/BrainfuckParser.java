@@ -48,7 +48,7 @@ public class BrainfuckParser implements Parser {
 		
 	}
 
-	public void parse(File sourceFile) throws IOException {
+	public void parse(File sourceFile) throws IOException, ParserException {
 		try {
 			parseString(FileHelper.fileToString(sourceFile));
 		} catch (Exception e) {

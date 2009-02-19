@@ -61,7 +61,8 @@ public class Translator {
 
 	public void translate() throws IOException {
 		// Parse stuff
-		parser.parse(inFile);
+		try {
+			parser.parse(inFile);
 	
 		// Print parsing result
 		writer.append(System.getProperty("line.separator")).flush();
@@ -69,6 +70,10 @@ public class Translator {
 		container.writeCode();
 				
 		compile();
+		} catch (ParserException e) {
+			System.err.println("A Parser Exception was caught...");
+			e.printStackTrace();
+		}
 	}
 
 	public void compile() {

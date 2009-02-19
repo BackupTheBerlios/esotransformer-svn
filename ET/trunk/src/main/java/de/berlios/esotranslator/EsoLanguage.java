@@ -1,10 +1,12 @@
 package de.berlios.esotranslator;
 
+import de.berlios.esotranslator.aeolbonn.AoelbonnBuilderFactory;
 import de.berlios.esotranslator.brainfuck.BFBuilderFactory;
 
 public enum EsoLanguage {
 	BrainFuck("bf", new BFBuilderFactory()),
-	Ook("ook", new BFBuilderFactory());
+	Ook("ook", new BFBuilderFactory()),
+	Aeolbonn("aeo", new AoelbonnBuilderFactory());
 
 	
 	private String extension;

@@ -15,15 +15,12 @@
  * You should have received a copy of the GNU General Public License along 
  * with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-package de.berlios.esotranslator;
+package de.berlios.esotranslator.aeolbonn;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-
-public interface Parser {
-	public void parse(File sourceFile) throws IOException, ParserException;
-	public void setContainer(CodeContainer container);
-	public void setWriter(PrintWriter writer);
-//	public void setName(String name);
+interface AeolbonnBuilder {
+	void print(String line);
+	void flipField(int field);
+	void flipFlipRandomly();
+	void incAsterisk();
+	void decAsterisk();
 }

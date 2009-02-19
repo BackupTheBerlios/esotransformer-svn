@@ -35,12 +35,13 @@ public class EsoTranslator {
 		logger.addAppender(new ConsoleAppender(new SimpleLayout()));
 		
 		if (args.length != 2) {	
-			logger.info("Usage: EsoTranslator <SourceFile> <DestinationLanguage>\n");
-			logger.info("    Supported source language is: " + EsoLanguage.getList());
-			logger.info("    Supported destination languages are: "+ CommonLanguage.getList() + "\n");
+			logger.info("Usage: EsoTranslator <SourceFile> <DestinationLanguage>");
+			logger.info("");
+			logger.info("    Supported source languages are: " + EsoLanguage.getList());
+			logger.info("    Supported destination languages are: "+ CommonLanguage.getList());
+			logger.info("");
 			logger.info("Example: EsoTranslator testMe.bf Java");
 			logger.info("    will create testMe.java and testMe.class");
-			logger.info(args.length);
 			System.exit(1);
 		}
 		
