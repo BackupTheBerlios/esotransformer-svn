@@ -1,6 +1,9 @@
 package de.berlios.esotranslator.brainfuck;
 
+import static org.easymock.classextension.EasyMock.*;
 import static org.junit.Assert.*;
+
+import java.io.PrintWriter;
 
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
@@ -11,12 +14,38 @@ import de.berlios.esotranslator.CodeContainer;
 import de.berlios.esotranslator.ParserException;
 
 public class BrainfuckParserTest {
-	private BrainfuckParser bp = new BrainfuckParser();;
+	private BrainfuckParser bp = new BrainfuckParser();
+	
 	static {
 		Logger logger = Logger.getRootLogger();
 		logger.addAppender(new ConsoleAppender(new SimpleLayout()));
 	}
 
+	@Test
+	public void testMock1() {
+		// Mockup
+		PrintWriter writerMock = createMock(PrintWriter.class);
+		writerMock.write(5);
+		writerMock.write("d ");
+		writerMock.write(10);
+		writerMock.write("d ");
+		replay(writerMock);
+
+		CodeContainerImpl container = new CodeContainerImpl();
+		
+		bp.setContainer(container);
+		bp.setWriter(writerMock);
+		String program = "+++++.+++++."; // "5d 10d"
+		try {
+			bp.parseString(program);
+		} catch (ParserException e) {
+			// TODO Auto-generated catch block
+			fail(e.getMessage());
+		}
+		
+		verify(writerMock);
+	}
+	
 	@Test
 	public void testDoLoop() throws Exception {
 		CodeContainerImpl container = new CodeContainerImpl();

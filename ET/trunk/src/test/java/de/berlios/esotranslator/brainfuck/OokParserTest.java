@@ -21,7 +21,6 @@ public class OokParserTest {
 
 	@Test
 	public void testParse() {
-
 		PrintWriter writer = new PrintWriter(System.out);
 		EsoLanguage inLang = EsoLanguage.Ook;
 		CodeContainer container;
@@ -37,15 +36,10 @@ public class OokParserTest {
 			File inFile = new File("src/test/resources/Hello.ook");
 			parser.parse(inFile );
 			
-		} catch (BuilderException e) {
-			e.printStackTrace();
-			fail("bad");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail("bad");
+		} catch (Exception e) {
+			//e.printStackTrace();
+			fail(e.getMessage());
 		}
-
 	}
 	
 	@Test
