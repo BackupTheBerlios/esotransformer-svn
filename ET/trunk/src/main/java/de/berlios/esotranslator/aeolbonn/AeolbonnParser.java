@@ -1,5 +1,5 @@
 /**
- * EsoTranslator - esoteric to common programmin languages translator
+ * EsoTranslator - esoteric to common programming languages translator
  *
  * Copyright (C) 2009 Christoph Becker, tuergeist@users.berlios.de
  *
@@ -38,6 +38,7 @@ public class AeolbonnParser implements Parser {
 	int programPointer; // line pointer ;)
 	
 	private PrintWriter writer;
+	private AeolbonnBuilder builder;
 	
 	public AeolbonnParser() {
 		memory = new boolean[1000];
@@ -62,10 +63,10 @@ public class AeolbonnParser implements Parser {
 			char startChar = line.charAt(0);
 			switch (startChar) {
 			case '<':
-				asterisk--;
+				decAsterisk();
 				break;
 			case '>':
-				asterisk++;
+				incAsterisk();
 				break;
 			case ':':
 				print(line);
@@ -87,13 +88,25 @@ public class AeolbonnParser implements Parser {
 		}
 	}
 
+	void incAsterisk() {
+		asterisk++;
+		builder.incAsterisk();
+	}
+
+	void decAsterisk() {
+		asterisk--;
+		builder.decAsterisk();
+	}
+
 	void print(String line) {
 		if (line.length() == 1) {
 			System.out.println("[NL]");
 			writer.println();
+			builder.print("");
 		} else {
 			System.out.print(line.substring(1));
 			writer.print(line.substring(1));
+			builder.print(line.substring(1));
 		}
 	}
 
@@ -114,6 +127,7 @@ public class AeolbonnParser implements Parser {
 		flip = (Math.random() >= .5); // flip rand
 	}
 	
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -121,8 +135,7 @@ public class AeolbonnParser implements Parser {
 	 */
 	@Override
 	public void setContainer(CodeContainer container) {
-		// TODO Auto-generated method stub
-
+		this.builder = (AeolbonnBuilder) container;
 	}
 
 	/*

@@ -6,24 +6,23 @@ import java.io.StringWriter;
 import de.berlios.esotranslator.CodeContainer;
 
 public class JavaBuilder extends CodeContainer implements AeolbonnBuilder {
+	String language = "Java";
 
 	@Override
+	public String getFileName() {
+		return className + ".java";
+	}
+
 	public String getBinaryFileName() {
-		// TODO Auto-generated method stub
-		return null;
+		return className + ".class";
 	}
 
 	@Override
 	public String getEndCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return "   System.out.println(); " + linefeed + "}" + linefeed + "}";
 	}
 
-	@Override
-	public String getFileName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public String getStartCode() {
@@ -51,7 +50,19 @@ public class JavaBuilder extends CodeContainer implements AeolbonnBuilder {
 		pw.println("		}");
 		pw.println("	}");
 		pw.println();
+		pw.println("	void flipField(int n) {");
+		pw.println("		memory[n] = ! memory[n];");
+		pw.println("		flip = memory[n];");
+		pw.println("	}");	
 		pw.println();
+		pw.println("	void handleDigit(int i) {");	
+		pw.println("		if (i % 2 == 0 && flip) {");	
+		pw.println("			programPointer = i - 1; // jump");	
+		pw.println("		} else {");	
+		pw.println("			flipField(i);");	
+		pw.println("		}");	
+		pw.println("	}");
+		pw.println();	
 		pw.println("// main action goes here");
 		pw.println("public void doIt() {");
 
@@ -62,32 +73,34 @@ public class JavaBuilder extends CodeContainer implements AeolbonnBuilder {
 	
 	@Override
 	public void decAsterisk() {
-		// TODO Auto-generated method stub
-		
+		add("asterisk--;");
 	}
 
 	@Override
 	public void flipField(int field) {
-		// TODO Auto-generated method stub
-		
+		add("flipField(" + field +")");
 	}
 
 	@Override
 	public void flipFlipRandomly() {
-		// TODO Auto-generated method stub
-		
+		add("flip = (Math.random() >= .5);");
 	}
 
 	@Override
 	public void incAsterisk() {
-		// TODO Auto-generated method stub
+		add("asterisk++;");
 		
 	}
 
 	@Override
 	public void print(String line) {
 		// TODO Auto-generated method stub
-		
+		add("System.out.println(" + line + ");");
+	}
+
+	@Override
+	public void handleDigit(int digit) {
+		add("handleDigit(" + digit + ")");		
 	}
 
 }

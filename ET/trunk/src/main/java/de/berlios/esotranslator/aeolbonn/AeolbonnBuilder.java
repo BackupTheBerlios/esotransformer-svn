@@ -23,4 +23,5 @@ interface AeolbonnBuilder {
 	void flipFlipRandomly();
 	void incAsterisk();
 	void decAsterisk();
+	void handleDigit(int digit);
 }
