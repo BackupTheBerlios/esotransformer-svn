@@ -16,6 +16,7 @@ public class CompilerFactory {
 			break;
 		case C:
 			compiler = new CCompiler();
+			break;
 		default:
 			throw new IllegalAccessException("Unknown Language - no compiler found.");
 		}
