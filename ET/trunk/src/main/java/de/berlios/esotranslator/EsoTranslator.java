@@ -42,6 +42,8 @@ public class EsoTranslator {
 			logger.info("");
 			logger.info("Example: EsoTranslator testMe.bf Java");
 			logger.info("    will create testMe.java and testMe.class");
+			logger.info("");
+			logger.info("Note: Aoelbonn is not bijektive translateable into Java!");
 			System.exit(1);
 		}
 		
